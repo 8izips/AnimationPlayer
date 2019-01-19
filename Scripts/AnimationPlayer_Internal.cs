@@ -76,6 +76,9 @@ public partial class AnimationPlayer : AnimationPlayerBase
                 state.time = (float)state.clipPlayable.GetTime();
                 if (state.duration > 0.0f)
                     state.normalizedTime = state.time / state.duration;
+
+                if (state.time >= state.duration && !state.isLooping)
+                    state.endCallback?.Invoke();
             }
         }
     }

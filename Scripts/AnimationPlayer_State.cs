@@ -32,6 +32,7 @@ public partial class AnimationPlayer : AnimationPlayerBase
             this.weightDirty = false;
             this.fading = false;
             this.fadeSpeed = 0.0f;
+            this.isLooping = clip.isLooping;
         }
 
         public bool enable { get; private set; } = false;
@@ -85,8 +86,13 @@ public partial class AnimationPlayer : AnimationPlayerBase
 
         public bool speedDirty = false;
         public bool applyFootIK = false;
+        public bool isLooping { get; private set; } = false;
 
-        public System.Action onEndCallback;
+        public System.Action endCallback { get; private set; }
+        public void SetEndCallback(System.Action callback)
+        {
+            endCallback = callback;
+        }
     }
 
     [SerializeField]
