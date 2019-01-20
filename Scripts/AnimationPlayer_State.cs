@@ -69,6 +69,7 @@ public partial class AnimationPlayer : AnimationPlayerBase
             }
             else {
                 this.fadeSpeed = diff / fadeTime;
+                Debug.Log(diff + "/" + fadeTime + "=" + this.fadeSpeed);
             }
             
             this.targetWeight = targetWeight;
@@ -92,6 +93,11 @@ public partial class AnimationPlayer : AnimationPlayerBase
         public void SetEndCallback(System.Action callback)
         {
             endCallback = callback;
+        }
+
+        public void ClearEndCallback()
+        {
+            endCallback = null;
         }
     }
 
