@@ -37,4 +37,4 @@ State管理しない分ちょっとだけ軽くなります。
 
 
 ** PlayableAPIを使って実装したのでUnity 2017.1以上で動作します。  
-UnityのRepositoryから[PlayableGraph Visualizer](https://github.com/Unity-Technologies/graph-visualizer)も一緒に使うとデバッグが便利になります。
+[PlayableGraph Visualizer](https://github.com/Unity-Technologies/graph-visualizer)も一緒に使うとデバッグが楽になります。
