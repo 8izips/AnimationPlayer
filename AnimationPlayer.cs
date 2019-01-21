@@ -4,15 +4,22 @@ using UnityEngine;
 using UnityEngine.Playables;
 
 public partial class AnimationPlayer : AnimationPlayerBase
-{   
+{
+    public AnimationState GetState(string stateName)
+    {
+        return _states[_GetStateIndex(stateName)];
+    }
+
+    public AnimationState GetState(int index)
+    {
+        if (IsStateIndexValid(index))
+            return null;
+        return _states[index];
+    }
+
     public int AddState(string stateName, AnimationClip animClip)
     {
         return _AddState(stateName, animClip);
-    }
-
-    public void RemoveState(int index)
-    {
-        _RemoveState(index);
     }
 
     public void RemoveState(string stateName)
@@ -20,14 +27,9 @@ public partial class AnimationPlayer : AnimationPlayerBase
         _RemoveState(_GetStateIndex(stateName));
     }
 
-    public AnimationState GetState(int index)
+    public void RemoveState(int index)
     {
-        return _states[index];
-    }
-
-    public AnimationState GetState(string stateName)
-    {
-        return _states[_GetStateIndex(stateName)];
+        _RemoveState(index);
     }
 
     public void Play(string stateName)
@@ -113,5 +115,24 @@ public partial class AnimationPlayer : AnimationPlayerBase
         state.SetEnable(false);
         state.SetWeight(0.0f);
         state.ResetFade();
+    }
+
+    public void Rewind()
+    {
+        for (int i = 0; i < _states.Length; i++)
+            _states[i]?.SetStateTime(0.0f);
+    }
+
+    public void Rewind(string stateName)
+    {
+        Rewind(_GetStateIndex(stateName));
+    }
+
+    public void Rewind(int stateIndex)
+    {
+        if (IsStateIndexValid(stateIndex))
+            return;
+
+        _states[stateIndex].SetStateTime(0.0f);
     }
 }

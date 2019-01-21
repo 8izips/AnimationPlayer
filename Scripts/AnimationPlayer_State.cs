@@ -12,9 +12,21 @@ public partial class AnimationPlayer : AnimationPlayerBase
         public string name;
         public AnimationClip clip;
         public float time = 0.0f;
-        public float normalizedTime = 0.0f;
-        public float duration;
-        
+        public float duration = 0.0f;
+        public float normalizedTime {
+            get {
+                if (duration != 0.0f)
+                    return time / duration;
+                return 0.0f;
+            }
+        }
+
+        public void SetStateTime(float stateTime)
+        {
+            time = stateTime;
+            clipPlayable.SetTime(stateTime);
+        }
+
         public AnimationClipPlayable clipPlayable { get; private set; }
         public void Init(PlayableGraph graph, bool enable, float weight)
         {
