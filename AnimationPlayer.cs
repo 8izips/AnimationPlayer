@@ -12,7 +12,7 @@ public partial class AnimationPlayer : AnimationPlayerBase
 
     public AnimationState GetState(int index)
     {
-        if (IsStateIndexValid(index))
+        if (!IsStateIndexValid(index))
             return null;
         return _states[index];
     }

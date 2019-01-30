@@ -31,6 +31,9 @@ public partial class AnimationPlayer : AnimationPlayerBase
 
     void Update()
     {
+        if (!_graph.IsValid())
+            return;
+
         float elapsedTime = Time.deltaTime;
 
         for (int i = 0; i < _states.Length; i++) {
@@ -56,7 +59,7 @@ public partial class AnimationPlayer : AnimationPlayerBase
                 if (state.enable)
                     state.clipPlayable.Play();
                 else
-                    state.clipPlayable.Pause();                    
+                    state.clipPlayable.Pause();
                 state.enableDirty = false;
             }
 
