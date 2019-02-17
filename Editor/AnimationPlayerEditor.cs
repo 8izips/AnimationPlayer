@@ -39,11 +39,11 @@ public class AnimationPlayerEditor : Editor
     }
 
     public override void OnInspectorGUI()
-    {
+    {   
         serializedObject.Update();
 
         // Animator Property
-        animator = (Animator)EditorGUILayout.ObjectField("Animator", animator, typeof(Animator), true);        
+        animator = (Animator)EditorGUILayout.ObjectField("Animator", animator, typeof(Animator), true);
         EditorGUILayout.BeginVertical("Box");
         _instance.Avatar = (Avatar)EditorGUILayout.ObjectField("Avatar", animator.avatar, typeof(Avatar), true);
         _instance.ApplyRootMotion = EditorGUILayout.Toggle("Apply Root Motion", _instance.ApplyRootMotion);

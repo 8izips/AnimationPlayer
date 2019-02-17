@@ -30,6 +30,9 @@ public partial class AnimationPlayer : AnimationPlayerBase
         public AnimationClipPlayable clipPlayable { get; private set; }
         public void Init(PlayableGraph graph, bool enable, float weight)
         {
+            if (clip == null)
+                return;
+
             if (graph.IsValid()) {
                 clipPlayable = AnimationClipPlayable.Create(graph, clip);
                 if (!clip.isLooping)
