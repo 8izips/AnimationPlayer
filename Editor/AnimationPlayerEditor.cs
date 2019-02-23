@@ -34,14 +34,18 @@ public class AnimationPlayerEditor : Editor
             _instance.States[index].name = EditorGUI.TextField(rect, _instance.States[index].name);
 
             rect.x += rectWidth;
-            _instance.States[index].clip = (AnimationClip)EditorGUI.ObjectField(rect, _instance.States[index].clip, typeof(AnimationClip), true);            
+            var curClip = (AnimationClip)EditorGUI.ObjectField(rect, _instance.States[index].clip, typeof(AnimationClip), true);
+            if (curClip != _instance.States[index].clip)
+                EditorUtility.SetDirty(_instance);
+                
+            _instance.States[index].clip = curClip;
         };
     }
 
     public override void OnInspectorGUI()
-    {   
+    {
         serializedObject.Update();
-
+        
         // Animator Property
         animator = (Animator)EditorGUILayout.ObjectField("Animator", animator, typeof(Animator), true);
         EditorGUILayout.BeginVertical("Box");
@@ -54,34 +58,31 @@ public class AnimationPlayerEditor : Editor
         // State Property
         EditorGUILayout.BeginVertical("Box");
         _instance.PlayOnAwake = EditorGUILayout.Toggle("Play On Awake", _instance.PlayOnAwake);
+
         if (!Application.isPlaying) {
             StateOnEditor();
-            StateDetailOnEditor();
         }
         else {            
             StateOnPlay();
         }
-        EditorGUILayout.EndVertical();
-
+        EditorGUILayout.EndVertical();        
         serializedObject.ApplyModifiedProperties();
     }
 
     void StateOnEditor()
     {
         EditorGUILayout.LabelField("Editor Mode", EditorStyles.boldLabel);
-        EditorGUI.BeginChangeCheck();
 
         states.DoLayoutList();
-
-        if (EditorGUI.EndChangeCheck()) {
-            serializedObject.ApplyModifiedProperties();            
-        }
+        //EditorGUILayout.PropertyField(stateProperty);
+        StateDetailOnEditor();
     }
 
     void StateDetailOnEditor()
     {
-        if (states.index == -1)
+        if (states.index == -1 || states.index >= _instance.States.Length)
             return;
+
         AnimationPlayer.AnimationState state = _instance.States[states.index];
         if (state == null)
             return;
@@ -101,12 +102,11 @@ public class AnimationPlayerEditor : Editor
 
         // Controller
         EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Play")) {
+        if (GUILayout.Button("Play"))
             _instance.Play();
-        }
-        if (GUILayout.Button("Stop")) {
+        if (GUILayout.Button("Stop"))
             _instance.Stop();
-        }
+
         EditorGUILayout.EndHorizontal();
 
         // State Information
