@@ -83,8 +83,7 @@ public partial class AnimationPlayer : AnimationPlayerBase
                 this.weight = targetWeight;
             }
             else {
-                this.fadeSpeed = diff / fadeTime;
-                Debug.Log(diff + "/" + fadeTime + "=" + this.fadeSpeed);
+                this.fadeSpeed = diff / fadeTime;                
             }
             
             this.targetWeight = targetWeight;
@@ -120,7 +119,7 @@ public partial class AnimationPlayer : AnimationPlayerBase
     AnimationState[] _states = new AnimationState[1];
     public AnimationState[] States { get { return _states; } set { _states = value; } }
     public int StateCount { get; private set; }
-    public int CurStateIndex { get; private set; }
+    public int CurStateIndex { get; private set; } = 0;
     public AnimationState CurState { get { return _states[CurStateIndex]; } }
 
     bool IsStateIndexValid(int index)
