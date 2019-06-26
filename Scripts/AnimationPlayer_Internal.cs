@@ -76,8 +76,12 @@ public partial class AnimationPlayer : AnimationPlayerBase
             if (state.enable) {
                 state.time = (float)state.clipPlayable.GetTime();
 
-                if (state.time >= state.duration && !state.isLooping)
+                if (state.time >= state.duration && !state.isLooping) {
+                    if (DeactivateOnEnd)
+                        gameObject.SetActive(false);
+
                     state.endCallback?.Invoke();
+                }
             }
         }
     }

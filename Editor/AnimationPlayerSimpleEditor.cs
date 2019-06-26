@@ -28,7 +28,7 @@ public class AnimationPlayerSimpleEditor : Editor
         serializedObject.Update();
 
         // Animator Property
-        animator = (Animator)EditorGUILayout.ObjectField("Animator", animator, typeof(Animator), true);        
+        animator = (Animator)EditorGUILayout.ObjectField("Animator", animator, typeof(Animator), true);
         EditorGUILayout.BeginVertical("Box");
         _instance.Avatar = (Avatar)EditorGUILayout.ObjectField("Avatar", animator.avatar, typeof(Avatar), true);
         _instance.ApplyRootMotion = EditorGUILayout.Toggle("Apply Root Motion", _instance.ApplyRootMotion);
@@ -38,11 +38,25 @@ public class AnimationPlayerSimpleEditor : Editor
 
         // State Property
         EditorGUILayout.BeginVertical("Box");
-        _instance.PlayOnAwake = EditorGUILayout.Toggle("Play On Awake", _instance.PlayOnAwake);
+
+        bool isDirty = false;
+        var playOnAwake = EditorGUILayout.Toggle("Play On Awake", _instance.PlayOnAwake);
+        if (playOnAwake != _instance.PlayOnAwake) {
+            _instance.PlayOnAwake = playOnAwake;
+            isDirty = true;
+        }
+        var deactivateOnEnd = EditorGUILayout.Toggle("Deactivate On End", _instance.DeactivateOnEnd);
+        if (deactivateOnEnd != _instance.DeactivateOnEnd) {
+            _instance.DeactivateOnEnd = deactivateOnEnd;
+            isDirty = true;
+        }
+        if (isDirty)
+            EditorUtility.SetDirty(_instance);
+
         if (!Application.isPlaying) {
             ClipOnEditor();
         }
-        else {            
+        else {
             ClipOnPlay();
         }
         EditorGUILayout.EndVertical();
@@ -70,7 +84,7 @@ public class AnimationPlayerSimpleEditor : Editor
         EditorGUILayout.PropertyField(animClip);
 
         if (EditorGUI.EndChangeCheck()) {
-            serializedObject.ApplyModifiedProperties();            
+            serializedObject.ApplyModifiedProperties();
         }
     }
 

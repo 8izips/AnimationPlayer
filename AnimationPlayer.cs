@@ -117,6 +117,12 @@ public partial class AnimationPlayer : AnimationPlayerBase
         state.ResetFade();
     }
 
+    public void SetTime(float time)
+    {
+        for (int i = 0; i < _states.Length; i++)
+            _states[i]?.SetStateTime(time);
+    }
+
     public void Rewind()
     {
         for (int i = 0; i < _states.Length; i++)

@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.Playables;
 
 public class AnimationPlayerSimple : AnimationPlayerBase
 {
     [SerializeField]
     AnimationClip animClip;
+    AnimationClipPlayable clipPlayable;
 
     public override void Init()
     {
@@ -15,10 +17,23 @@ public class AnimationPlayerSimple : AnimationPlayerBase
 
         base.Init();
 
-        AnimationClipPlayable clipPlayable = AnimationClipPlayable.Create(_playable.Graph, animClip); ;
+        clipPlayable = AnimationClipPlayable.Create(_playable.Graph, animClip);
+
         _playable.ConnectInput(0, clipPlayable);
         _playable.SetInputWeight(0, 1.0f);
 
         _initialized = true;
+    }
+
+    void Update()
+    {
+        if (!_initialized || !_graph.IsValid())
+            return;
+
+        if (DeactivateOnEnd) {
+            if (clipPlayable.GetTime() > animClip.length) {
+                gameObject.SetActive(false);
+            }
+        }
     }
 }

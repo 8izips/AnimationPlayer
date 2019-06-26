@@ -6,7 +6,8 @@ using UnityEngine.Playables;
 [RequireComponent(typeof(Animator))]
 public abstract partial class AnimationPlayerBase : MonoBehaviour
 {
-    public bool PlayOnAwake;
+    public bool PlayOnAwake = true;
+    public bool DeactivateOnEnd = false;
 
     public bool IsPlaying()
     {

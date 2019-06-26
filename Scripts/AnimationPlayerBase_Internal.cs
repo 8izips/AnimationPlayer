@@ -46,7 +46,7 @@ public abstract partial class AnimationPlayerBase : MonoBehaviour
 
     void OnEnable()
     {
-        Init();        
+        Init();
 
         if (PlayOnAwake)
             Play();
@@ -80,7 +80,7 @@ public abstract partial class AnimationPlayerBase : MonoBehaviour
         AnimationPlayable template = new AnimationPlayable();
         var playable = ScriptPlayable<AnimationPlayable>.Create(_graph, template, 1);
         _playable = playable.GetBehaviour();
-        
+
         _initialized = true;
     }
 }

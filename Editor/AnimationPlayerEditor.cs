@@ -30,14 +30,14 @@ public class AnimationPlayerEditor : Editor
             rect.width = rectWidth - 2;
             rect.height -= 4;
             rect.y += 1;
-            
+
             _instance.States[index].name = EditorGUI.TextField(rect, _instance.States[index].name);
 
             rect.x += rectWidth;
             var curClip = (AnimationClip)EditorGUI.ObjectField(rect, _instance.States[index].clip, typeof(AnimationClip), true);
             if (curClip != _instance.States[index].clip)
                 EditorUtility.SetDirty(_instance);
-                
+
             _instance.States[index].clip = curClip;
         };
     }
@@ -45,7 +45,7 @@ public class AnimationPlayerEditor : Editor
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-        
+
         // Animator Property
         animator = (Animator)EditorGUILayout.ObjectField("Animator", animator, typeof(Animator), true);
         EditorGUILayout.BeginVertical("Box");
@@ -57,15 +57,28 @@ public class AnimationPlayerEditor : Editor
 
         // State Property
         EditorGUILayout.BeginVertical("Box");
-        _instance.PlayOnAwake = EditorGUILayout.Toggle("Play On Awake", _instance.PlayOnAwake);
+
+        bool isDirty = false;
+        var playOnAwake = EditorGUILayout.Toggle("Play On Awake", _instance.PlayOnAwake);
+        if (playOnAwake != _instance.PlayOnAwake) {
+            _instance.PlayOnAwake = playOnAwake;
+            isDirty = true;
+        }
+        var deactivateOnEnd = EditorGUILayout.Toggle("Deactivate On End", _instance.DeactivateOnEnd);
+        if (deactivateOnEnd != _instance.DeactivateOnEnd) {
+            _instance.DeactivateOnEnd = deactivateOnEnd;
+            isDirty = true;
+        }
+        if (isDirty)
+            EditorUtility.SetDirty(_instance);
 
         if (!Application.isPlaying) {
             StateOnEditor();
         }
-        else {            
+        else {
             StateOnPlay();
         }
-        EditorGUILayout.EndVertical();        
+        EditorGUILayout.EndVertical();
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -74,7 +87,6 @@ public class AnimationPlayerEditor : Editor
         EditorGUILayout.LabelField("Editor Mode", EditorStyles.boldLabel);
 
         states.DoLayoutList();
-        //EditorGUILayout.PropertyField(stateProperty);
         StateDetailOnEditor();
     }
 
@@ -90,8 +102,30 @@ public class AnimationPlayerEditor : Editor
         EditorGUILayout.BeginVertical("Box");
         EditorGUILayout.LabelField(state.name, EditorStyles.boldLabel);
         EditorGUI.indentLevel++;
-        state.speed = EditorGUILayout.DelayedFloatField("Speed", state.speed);
-        state.applyFootIK = EditorGUILayout.Toggle("Apply Foot IK", state.applyFootIK);
+
+        bool isDirty = false;
+        var speed = EditorGUILayout.DelayedFloatField("Speed", state.speed);
+        if (speed != state.speed) {
+            state.speed = speed;
+            isDirty = true;
+        }
+
+        var applyFootIK = EditorGUILayout.Toggle("Apply Foot IK", state.applyFootIK);
+        if (applyFootIK != state.applyFootIK) {
+            state.applyFootIK = applyFootIK;
+            isDirty = true;
+        }
+
+        var applyPlayableIK = EditorGUILayout.Toggle("Apply Playable IK", state.applyPlayableIK);
+        if (applyPlayableIK != state.applyPlayableIK) {
+            state.applyPlayableIK = applyPlayableIK;
+            isDirty = true;
+        }
+
+        if (isDirty)
+            EditorUtility.SetDirty(_instance);
+
+        EditorGUI.indentLevel--;
         EditorGUILayout.EndVertical();
     }
 
@@ -113,7 +147,6 @@ public class AnimationPlayerEditor : Editor
         Color weightZeroColor = new Color(0.18f, 0.3f, 0.15f, 0.7f);
         Color weightOneColor = new Color(0.68f, 0.825f, 0.65f, 0.3f);
         EditorGUILayout.BeginVertical("Box");
-
         EditorGUI.indentLevel++;
 
         playDetailFoldOpened = EditorGUILayout.Foldout(playDetailFoldOpened, playDetailFoldOpened ? "Detail" : "Simple");
@@ -143,8 +176,10 @@ public class AnimationPlayerEditor : Editor
                 EditorGUILayout.DelayedFloatField("NormalizedTime", state.normalizedTime);
                 EditorGUILayout.DelayedFloatField("Weight", state.weight);
                 EditorGUILayout.DelayedFloatField("FadeSpeed", state.fadeSpeed);
-            }            
+            }
         }
+
+        EditorGUI.indentLevel--;
         EditorGUILayout.EndVertical();
     }
 }

@@ -38,6 +38,7 @@ public partial class AnimationPlayer : AnimationPlayerBase
                 if (!clip.isLooping)
                     clipPlayable.SetDuration(clip.length);
                 clipPlayable.SetApplyFootIK(applyFootIK);
+                clipPlayable.SetApplyPlayableIK(applyPlayableIK);
             }
             duration = clip.length;
 
@@ -101,6 +102,7 @@ public partial class AnimationPlayer : AnimationPlayerBase
 
         public bool speedDirty = false;
         public bool applyFootIK = false;
+        public bool applyPlayableIK = false;
         public bool isLooping { get; private set; } = false;
 
         public System.Action endCallback { get; private set; }
